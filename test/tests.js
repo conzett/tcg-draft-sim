@@ -8,7 +8,35 @@ Test.TestPack = App.Pack.extend({
     }
 });
 
-module("Standard draft model", {
+module("Draft model");
+
+test("Passing packs", function () {
+
+  var player1 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+      player2 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+      player3 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+      player4 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+      draft;
+
+  draft = new App.Draft({
+    players : new App.Players([player1, player2, player3, player4])
+  });
+
+  draft.passPacks();
+  equal(draft.get("players").at(0).get('currentPack').cid,
+    player4.get('currentPack').cid, "Expect first player to have player four's pack");
+
+  equal(draft.get("players").at(1).get('currentPack').cid,
+    player1.get('currentPack').cid, "Expect second player to have player one's pack");
+
+  equal(draft.get("players").at(2).get('currentPack').cid,
+    player2.get('currentPack').cid, "Expect third player to have player twos's pack");
+
+  equal(draft.get("players").at(3).get('currentPack').cid,
+    player3.get('currentPack').cid, "Expect fourth player to have player three's pack");
+});
+
+module("StandardDraft model", {
   setup: function() {
     this.draft = new App.StandardDraft();
   }

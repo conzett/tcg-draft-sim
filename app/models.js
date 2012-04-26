@@ -50,6 +50,9 @@ App.Players = Backbone.Collection.extend({
 App.Draft = Backbone.Model.extend({  
     defaults: {
         players : new App.Players()
+    },
+    passPacks: function() {
+        
     }
 });
 
