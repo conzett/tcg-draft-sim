@@ -11,11 +11,6 @@ App.Pack = Backbone.Model.extend({
     defaults: {
         cards : new App.Cards()
     },
-    initialize: function() {
-        while (this.get('cards').length < 15) {
-            this.get('cards').push(new App.Card());
-        }
-    },
     removeCard: function(cid) {
         var card = this.get('cards').getByCid(cid);
         this.get('cards').remove(card);
@@ -30,7 +25,7 @@ App.Packs = Backbone.Collection.extend({
 App.Player = Backbone.Model.extend({
     defaults: {
         human : false,
-        currentPack : new App.Pack(),
+        currentPack : null,
         packs : new App.Packs(),
         cards : new App.Cards()
     },
@@ -41,7 +36,10 @@ App.Player = Backbone.Model.extend({
         this.get('cards').push(this.get('currentPack').removeCard(cid));
     },
     openPack: function() {
-        this.set('currentPack', this.get('packs').shift());
+        var currentpack = this.get('currentPack');
+        if(currentpack === null || currentpack.get('cards').length === 0) {
+            this.set('currentPack', this.get('packs').shift());
+        }        
     }
 });
 
