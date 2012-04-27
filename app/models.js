@@ -40,6 +40,11 @@ App.Player = Backbone.Model.extend({
         if(currentpack === null || currentpack.get('cards').length === 0) {
             this.set('currentPack', this.get('packs').shift());
         }        
+    },
+    swapCurrentPack: function(newPack) {
+        var packToReturn = this.get('currentPack');
+        this.set('currentPack', newPack);
+        return packToReturn;
     }
 });
 
@@ -52,7 +57,11 @@ App.Draft = Backbone.Model.extend({
         players : new App.Players()
     },
     passPacks: function() {
-        
+        var tempPack;
+        this.get('players').each(function(player) {
+            tempPack = player.swapCurrentPack(tempPack);
+        });
+        this.get('players').at(0).set('currentPack', tempPack);
     }
 });
 
