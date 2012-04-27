@@ -115,6 +115,11 @@ App.Draft = Backbone.Model.extend({
     defaults: {
         players : new App.Players()
     },
+    /**
+     * Pass all packs between players
+     *
+     * @memberOf App.Draft
+     */
     passPacks: function() {
         var tempPack;
         this.get('players').each(function(player) {
