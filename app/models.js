@@ -34,6 +34,18 @@ App.Pack = Backbone.Model.extend({
         var card = this.get('cards').getByCid(cid);
         this.get('cards').remove(card);
         return card;
+    },
+    /**
+     * Check if the pak is empty
+     *
+     * @memberOf App.Pack
+     * @returns {bool} True if the pack is empty
+     */
+    isEmpty: function() {
+        /*if( this.get('cards').length > 0 ) {
+            return false
+        }
+        return true;*/
     }
 });
 
@@ -55,12 +67,11 @@ App.Packs = Backbone.Collection.extend({
 App.Player = Backbone.Model.extend({
     defaults: {
         human : false,
-        currentPack : null,
         packs : new App.Packs(),
         cards : new App.Cards()
     },
     initialize: function() {
-        this.openPack();
+
     },
     /**
      * Pick a card from the current pack
@@ -70,7 +81,7 @@ App.Player = Backbone.Model.extend({
      * @returns {App.Card} The card specified
      */
     pickCard: function(cid) {
-        this.get('cards').push(this.get('currentPack').removeCard(cid));
+        this.get('cards').push(this.get('packs').first().removeCard(cid));
     },
     /**
      * Open a new pack
@@ -80,10 +91,18 @@ App.Player = Backbone.Model.extend({
      * @memberOf App.Player
      */
     openPack: function() {
-        var currentpack = this.get('currentPack');
-        if(currentpack === null || currentpack.get('cards').length === 0) {
-            this.set('currentPack', this.get('packs').shift());
-        }        
+        if(this.get('packs').first().get('cards').length == 0) {
+            this.get('packs').shift(); 
+        }             
+    },
+    /**
+     * Return the players current pack
+     *
+     * @memberOf App.Player
+     * @returns {App.Pack} The current open pack
+     */
+    getCurrentPack: function() {
+        return this.get('packs').first();
     },
     /**
      * Swap the players current pack
@@ -92,9 +111,9 @@ App.Player = Backbone.Model.extend({
      * @param {App.Pack} newPack Pack to be swapped with the player
      * @returns {App.Pack} The pack being swapped for
      */
-    swapCurrentPack: function(newPack) {
-        var packToReturn = this.get('currentPack');
-        this.set('currentPack', newPack);
+    swapCurrentPack: function(pack) {
+        var packToReturn = this.get('packs').shift();
+        this.get('packs').unshift(pack);
         return packToReturn;
     }
 });
@@ -125,7 +144,7 @@ App.Draft = Backbone.Model.extend({
         this.get('players').each(function(player) {
             tempPack = player.swapCurrentPack(tempPack);
         });
-        this.get('players').at(0).set('currentPack', tempPack);
+        this.get('players').at(0).get('packs').unshift(tempPack);
     }
 });
 

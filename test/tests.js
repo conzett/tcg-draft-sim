@@ -18,22 +18,20 @@ test("Passing packs", function () {
       player4 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
       draft, cid1, cid2, cid3, cid4;
 
-      console.log(player1);
-
-  cid1 = player1.get('currentPack').cid;
-  cid2 = player2.get('currentPack').cid;
-  cid3 = player3.get('currentPack').cid;
-  cid4 = player4.get('currentPack').cid;
+  cid1 = player1.getCurrentPack().cid;
+  cid2 = player2.getCurrentPack().cid;
+  cid3 = player3.getCurrentPack().cid;
+  cid4 = player4.getCurrentPack().cid;
 
   draft = new App.Draft({
     players : new App.Players([player1, player2, player3, player4])
   });
 
   draft.passPacks();
-  equal(draft.get("players").at(0).get('currentPack').cid, cid4, "Expect first player to have player four's pack");
-  equal(draft.get("players").at(1).get('currentPack').cid, cid1, "Expect second player to have player one's pack");
-  equal(draft.get("players").at(2).get('currentPack').cid, cid2, "Expect third player to have player twos's pack");
-  equal(draft.get("players").at(3).get('currentPack').cid, cid3, "Expect fourth player to have player three's pack");
+  equal(draft.get("players").at(0).getCurrentPack().cid, cid4, "Expect first player to have player four's pack");
+  equal(draft.get("players").at(1).getCurrentPack().cid, cid1, "Expect second player to have player one's pack");
+  equal(draft.get("players").at(2).getCurrentPack().cid, cid2, "Expect third player to have player twos's pack");
+  equal(draft.get("players").at(3).getCurrentPack().cid, cid3, "Expect fourth player to have player three's pack");
 });
 
 module("StandardDraft model", {
@@ -71,20 +69,18 @@ test("Initialization", function () {
       packs : new App.Packs([pack1, pack2, pack3])
   });
 
-	equal(player.get("currentPack").cid, pack1.cid, "Expect currentPack to be the first back in the packs array");
-	equal(player.get("packs").length, 2, "Expect 2 non-current packs");
-	equal(player.get("packs").at(0).cid, pack2.cid, "Expect first remaining pack to be correct one");
-	equal(player.get("packs").at(1).cid, pack3.cid, "Expect second remaining pack to be correct one");
+	equal(player.getCurrentPack().cid, pack1.cid, "Expect currentPack to be the first back in the packs array");
+	equal(player.get("packs").length, 3, "Expect 3 packs");
 });
 
 test("Picking a card", function () {
   var player = new App.Player({
-      packs : new App.Packs([new App.Pack()])
+      packs : new App.Packs([new Test.TestPack()])
   });
-  var cid = player.get('currentPack').get('cards').at(0).cid;
+  var cid = player.getCurrentPack().get('cards').at(0).cid;
   var card = player.pickCard(cid);
   equal(player.get('cards').length, 1, "Expect players number of cards to be 1 after initial pick");
-  equal(player.get('currentPack').get('cards').getByCid(cid), null, "Expect no card with the picked ID to be left in the pack");
+  equal(player.getCurrentPack().get('cards').getByCid(cid), null, "Expect no card with the picked ID to be left in the pack");
 });
 
 test("Opening a new pack", function () {
@@ -97,10 +93,10 @@ test("Opening a new pack", function () {
       packs : new App.Packs([pack1, pack2])
   });
 
-  player.get("currentPack").get('cards').reset(); /* Current pack needs to be empty before opening a new one */
+  player.getCurrentPack().get('cards').reset(); /* Current pack needs to be empty before opening a new one */
   player.openPack();
-  equal(player.get("currentPack").cid, pack2.cid, "Expect current pack to be the new pack, after opening the second pack");
-  equal(player.get('packs').length, 0, "Expect no packs to be left unopened after the player has opned both");
+  equal(player.getCurrentPack().cid, pack2.cid, "Expect current pack to be the new pack, after opening the second pack");
+  equal(player.get('packs').length, 1, "Expect only the active pack to be left");
 });
 
 test("Can't open a new pack before the current one is exhausted", function () {
@@ -113,8 +109,8 @@ test("Can't open a new pack before the current one is exhausted", function () {
   });
 
   player.openPack();
-  equal(player.get("currentPack").cid, pack1.cid, "Expect current pack to be the same after attempting to prematurely open a pack");
-  equal(player.get('packs').at(0).cid, pack2.cid, "Expect next pack to be left unopened after attempting to prematurely open a pack");
+  equal(player.getCurrentPack().cid, pack1.cid, "Expect current pack to be the same after attempting to prematurely open a pack");
+  equal(player.get('packs').at(1).cid, pack2.cid, "Expect next pack to be left unopened after attempting to prematurely open a pack");
 });
 
 test("Swapping out the current pack", function () {
@@ -127,5 +123,5 @@ test("Swapping out the current pack", function () {
   });
 
   equal(player.swapCurrentPack(pack2).cid, pack1.cid, "Expect pack returned from swap to be the former currentPack");
-  equal(player.get('currentPack').cid, pack2.cid, "Expect the new current pack to be the one we passed in");
+  equal(player.getCurrentPack().cid, pack2.cid, "Expect the new current pack to be the one we passed in");
 });
