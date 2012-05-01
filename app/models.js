@@ -23,6 +23,7 @@ App.Pack = Backbone.Model.extend({
     defaults: {
         cards : new App.Cards()
     },
+    initialize: function() {},
     /**
      * Remove a card from the pack
      *
@@ -41,11 +42,12 @@ App.Pack = Backbone.Model.extend({
      * @memberOf App.Pack
      * @returns {bool} True if the pack is empty
      */
-    isEmpty: function() {
-        /*if( this.get('cards').length > 0 ) {
+    empty: function() {
+        if( this.get('cards').length > 0 ) {
             return false
+        }else{
+            return true;
         }
-        return true;*/
     }
 });
 

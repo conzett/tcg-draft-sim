@@ -56,6 +56,13 @@ test("Removing a card", function () {
   equal(card.cid, cid, "Expect the ID of the returned card to match the card is removed");
 });
 
+test("Is a pack empty", function () {
+  console.log(new App.Pack());
+  var fullPack = new Test.TestPack(), emptyPack = new App.Pack();
+  ok(!fullPack.empty(), "empty returns false for a full pack");
+  ok(emptyPack.empty(), "empty returns true for an empty pack");
+});
+
 module("Player model");
 
 test("Initialization", function () {
