@@ -41,7 +41,7 @@ module("StandardDraft model", {
 });
 
 test("Initialization", function () {
-	equal(this.draft.get("players").length, 8, "Expect 8 players in a standard draft");
+	equal(this.draft.getBotPlayers().length, 7, "Expect 7 bot players in a standard draft");
 	equal(this.draft.getHumanPlayers().length, 1, "Expect 1 human player");
 });
 

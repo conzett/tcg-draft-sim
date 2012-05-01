@@ -179,6 +179,16 @@ App.Draft = Backbone.Model.extend({
     getHumanPlayers: function () {
         'use strict';
         return this.get("players").where({human: true});
+    },
+    /**
+     * Get all the bot players in the draft
+     *
+     * @memberOf App.Draft
+     * @returns {array} of bot players
+     */
+    getBotPlayers: function () {
+        'use strict';
+        return this.get("players").where({human: false});
     }
 });
 
