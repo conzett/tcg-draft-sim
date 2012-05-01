@@ -51,6 +51,16 @@ App.Pack = Backbone.Model.extend({
             return false;
         }
         return true;
+    },
+    /**
+     * Get the remaining cardsin a pack
+     *
+     * @memberOf App.Pack
+     * @returns {array} the cards in the pack
+     */
+    getCards: function () {
+        'use strict';
+        return this.get('cards');
     }
 });
 
@@ -120,7 +130,7 @@ App.Player = Backbone.Model.extend({
      */
     getUnopenedPacks: function () {
         'use strict';
-        return this.get('packs').rest();
+        return new App.Packs(this.get('packs').rest());
     },
     /**
      * Swap the players current pack
