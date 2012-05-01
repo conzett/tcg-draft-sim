@@ -113,6 +113,16 @@ App.Player = Backbone.Model.extend({
         return this.get('packs').first();
     },
     /**
+     * Get the unopened packs
+     *
+     * @memberOf App.Player
+     * @returns {array} Packs that have not been opened by the player
+     */
+    getUnopenedPacks: function () {
+        'use strict';
+        return this.get('packs').rest();
+    },
+    /**
      * Swap the players current pack
      *
      * @memberOf App.Player

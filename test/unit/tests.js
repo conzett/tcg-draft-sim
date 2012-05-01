@@ -75,7 +75,7 @@ test("Initialization", function () {
   });
 
 	equal(player.getCurrentPack().cid, pack1.cid, "Expect currentPack to be the first back in the packs array");
-	equal(player.get("packs").length, 3, "Expect 3 packs");
+	equal(player.getUnopenedPacks().length, 2, "Expect 2 unopened packs");
 });
 
 test("Picking a card", function () {
@@ -101,7 +101,7 @@ test("Opening a new pack", function () {
   player.getCurrentPack().get('cards').reset(); /* Current pack needs to be empty before opening a new one */
   player.openPack();
   equal(player.getCurrentPack().cid, pack2.cid, "Expect current pack to be the new pack, after opening the second pack");
-  equal(player.get('packs').length, 1, "Expect only the active pack to be left");
+  equal(player.getUnopenedPacks().length, 0, "Expect no unopened packs to be left");
 });
 
 test("Can't open a new pack before the current one is exhausted", function () {
