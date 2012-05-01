@@ -20,12 +20,12 @@ App.Cards = Backbone.Collection.extend({
     @class Represents a pack. 
  */
 App.Pack = Backbone.Model.extend({
-    defaults: function() {
+    defaults: function () {
+        'use strict';
         return {
             cards : new App.Cards()
-        }
+        };
     },
-    initialize: function() {},
     /**
      * Remove a card from the pack
      *
@@ -33,7 +33,8 @@ App.Pack = Backbone.Model.extend({
      * @param {String} cid CID of the card you want to remove
      * @returns {Card} The card specified
      */
-    removeCard: function(cid) {
+    removeCard: function (cid) {
+        'use strict';
         var card = this.get('cards').getByCid(cid);
         this.get('cards').remove(card);
         return card;
@@ -44,12 +45,12 @@ App.Pack = Backbone.Model.extend({
      * @memberOf App.Pack
      * @returns {bool} True if the pack is empty
      */
-    empty: function() {
-        if( this.get('cards').length > 0 ) {
-            return false
-        }else{
-            return true;
+    empty: function () {
+        'use strict';
+        if (this.get('cards').length > 0) {
+            return false;
         }
+        return true;
     }
 });
 
@@ -69,15 +70,13 @@ App.Packs = Backbone.Collection.extend({
  * @property {App.Cards} cards The player's picks.
  */
 App.Player = Backbone.Model.extend({
-    defaults: function() {
+    defaults: function () {
+        'use strict';
         return {
             human : false,
             packs : new App.Packs(),
             cards : new App.Cards()
-        }
-    },
-    initialize: function() {
-
+        };
     },
     /**
      * Pick a card from the current pack
@@ -86,7 +85,8 @@ App.Player = Backbone.Model.extend({
      * @param {String} cid CID of the card you want to pick
      * @returns {App.Card} The card specified
      */
-    pickCard: function(cid) {
+    pickCard: function (cid) {
+        'use strict';
         this.get('cards').push(this.get('packs').first().removeCard(cid));
     },
     /**
@@ -96,10 +96,11 @@ App.Player = Backbone.Model.extend({
      *
      * @memberOf App.Player
      */
-    openPack: function() {
-        if(this.get('packs').first().get('cards').length == 0) {
-            this.get('packs').shift(); 
-        }             
+    openPack: function () {
+        'use strict';
+        if (this.get('packs').first().get('cards').length === 0) {
+            this.get('packs').shift();
+        }
     },
     /**
      * Return the players current pack
@@ -107,7 +108,8 @@ App.Player = Backbone.Model.extend({
      * @memberOf App.Player
      * @returns {App.Pack} The current open pack
      */
-    getCurrentPack: function() {
+    getCurrentPack: function () {
+        'use strict';
         return this.get('packs').first();
     },
     /**
@@ -117,7 +119,8 @@ App.Player = Backbone.Model.extend({
      * @param {App.Pack} newPack Pack to be swapped with the player
      * @returns {App.Pack} The pack being swapped for
      */
-    swapCurrentPack: function(pack) {
+    swapCurrentPack: function (pack) {
+        'use strict';
         var packToReturn = this.get('packs').shift();
         this.get('packs').unshift(pack);
         return packToReturn;
@@ -137,19 +140,21 @@ App.Players = Backbone.Collection.extend({
     @class Represents a draft. 
  */
 App.Draft = Backbone.Model.extend({
-    defaults: function() {
+    defaults: function () {
+        'use strict';
         return {
             players : new App.Players()
-        }
+        };
     },
     /**
      * Pass all packs between players
      *
      * @memberOf App.Draft
      */
-    passPacks: function() {
+    passPacks: function () {
+        'use strict';
         var tempPack;
-        this.get('players').each(function(player) {
+        this.get('players').each(function (player) {
             tempPack = player.swapCurrentPack(tempPack);
         });
         this.get('players').at(0).get('packs').unshift(tempPack);
@@ -161,7 +166,8 @@ App.Draft = Backbone.Model.extend({
     @class Represents a standard draft. 
  */
 App.StandardDraft = App.Draft.extend({
-    initialize: function(){
+    initialize: function () {
+        'use strict';
         this.get('players').push(
             new App.Player({ human : true})
         );
