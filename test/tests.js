@@ -2,9 +2,9 @@ window.Test = {};
 
 Test.TestPack = App.Pack.extend({
     initialize: function() {
-        while (this.get('cards').length < 15) {
-            this.get('cards').push(new App.Card());
-        }
+      while (this.get('cards').length < 15) {
+          this.get('cards').push(new App.Card());
+      }
     }
 });
 
@@ -57,7 +57,6 @@ test("Removing a card", function () {
 });
 
 test("Is a pack empty", function () {
-  console.log(new App.Pack());
   var fullPack = new Test.TestPack(), emptyPack = new App.Pack();
   ok(!fullPack.empty(), "empty returns false for a full pack");
   ok(emptyPack.empty(), "empty returns true for an empty pack");

@@ -20,8 +20,10 @@ App.Cards = Backbone.Collection.extend({
     @class Represents a pack. 
  */
 App.Pack = Backbone.Model.extend({
-    defaults: {
-        cards : new App.Cards()
+    defaults: function() {
+        return {
+            cards : new App.Cards()
+        }
     },
     initialize: function() {},
     /**
@@ -67,10 +69,12 @@ App.Packs = Backbone.Collection.extend({
  * @property {App.Cards} cards The player's picks.
  */
 App.Player = Backbone.Model.extend({
-    defaults: {
-        human : false,
-        packs : new App.Packs(),
-        cards : new App.Cards()
+    defaults: function() {
+        return {
+            human : false,
+            packs : new App.Packs(),
+            cards : new App.Cards()
+        }
     },
     initialize: function() {
 
@@ -133,8 +137,10 @@ App.Players = Backbone.Collection.extend({
     @class Represents a draft. 
  */
 App.Draft = Backbone.Model.extend({
-    defaults: {
-        players : new App.Players()
+    defaults: function() {
+        return {
+            players : new App.Players()
+        }
     },
     /**
      * Pass all packs between players
