@@ -48,8 +48,8 @@ module("StandardDraft model", {
 
 test("Initialization", function () {
     'use strict';
-    equal(this.draft.getBotPlayers().length, 7, "Expect 7 bot players in a standard draft");
-    equal(this.draft.getHumanPlayers().length, 1, "Expect 1 human player");
+    equal(this.draft.listBotPlayers().length, 7, "Expect 7 bot players in a standard draft");
+    equal(this.draft.listHumanPlayers().length, 1, "Expect 1 human player");
 });
 
 module("Pack model");
@@ -57,9 +57,9 @@ module("Pack model");
 test("Removing a card", function () {
     'use strict';
     var pack = new Test.TestPack(), cid, card;
-    cid = pack.getCards().at(0).cid;
+    cid = pack.listCards().at(0).cid;
     card = pack.removeCard(cid);
-    equal(pack.getCards().length, 14, "Expect 14 cards in the test card pack after one removal");
+    equal(pack.listCards().length, 14, "Expect 14 cards in the test card pack after one removal");
     equal(card.cid, cid, "Expect the ID of the returned card to match the card is removed");
 });
 
@@ -84,7 +84,7 @@ test("Initialization", function () {
     });
 
 	equal(player.getCurrentPack().cid, pack1.cid, "Expect currentPack to be the first back in the packs array");
-	equal(player.getUnopenedPacks().length, 2, "Expect 2 unopened packs");
+	equal(player.listUnopenedPacks().length, 2, "Expect 2 unopened packs");
 });
 
 test("Picking a card", function () {
@@ -95,11 +95,11 @@ test("Picking a card", function () {
         cid,
         card;
 
-    cid = player.getCurrentPack().getCards().at(0).cid;
+    cid = player.getCurrentPack().listCards().at(0).cid;
     card = player.pickCard(cid);
-    equal(player.getPicks().length, 1, "Expect players number of cards to be 1 after initial pick");
-    equal(player.getPicks().at(0).cid, cid, "Expect card at first position to have the same ID after the initial pick");
-    equal(player.getCurrentPack().getCards().getByCid(cid), null, "Expect no card with the picked ID to be left in the pack");
+    equal(player.listPicks().length, 1, "Expect players number of cards to be 1 after initial pick");
+    equal(player.listPicks().at(0).cid, cid, "Expect card at first position to have the same ID after the initial pick");
+    equal(player.getCurrentPack().listCards().getByCid(cid), null, "Expect no card with the picked ID to be left in the pack");
 });
 
 test("Opening a new pack", function () {
@@ -112,10 +112,10 @@ test("Opening a new pack", function () {
         packs : new App.Packs([pack1, pack2])
     });
 
-    player.getCurrentPack().getCards().reset(); /* Current pack needs to be empty before opening a new one */
+    player.getCurrentPack().listCards().reset(); /* Current pack needs to be empty before opening a new one */
     player.openPack();
     equal(player.getCurrentPack().cid, pack2.cid, "Expect current pack to be the new pack, after opening the second pack");
-    equal(player.getUnopenedPacks().length, 0, "Expect no unopened packs to be left");
+    equal(player.listUnopenedPacks().length, 0, "Expect no unopened packs to be left");
 });
 
 test("Can't open a new pack before the current one is exhausted", function () {
@@ -130,7 +130,7 @@ test("Can't open a new pack before the current one is exhausted", function () {
 
     player.openPack();
     equal(player.getCurrentPack().cid, pack1.cid, "Expect current pack to be the same after attempting to prematurely open a pack");
-    equal(player.getUnopenedPacks().first().cid, pack2.cid, "Expect next pack to be left unopened after attempting to prematurely open a pack");
+    equal(player.listUnopenedPacks().first().cid, pack2.cid, "Expect next pack to be left unopened after attempting to prematurely open a pack");
 });
 
 test("Swapping out the current pack", function () {

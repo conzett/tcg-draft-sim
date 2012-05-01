@@ -53,12 +53,12 @@ App.Pack = Backbone.Model.extend({
         return true;
     },
     /**
-     * Get the remaining cardsin a pack
+     * List the remaining cards in a pack
      *
      * @memberOf App.Pack
      * @returns {array} the cards in the pack
      */
-    getCards: function () {
+    listCards: function () {
         'use strict';
         return this.get('cards');
     }
@@ -123,12 +123,12 @@ App.Player = Backbone.Model.extend({
         return this.get('packs').first();
     },
     /**
-     * Get the unopened packs
+     * List the unopened packs
      *
      * @memberOf App.Player
      * @returns {array} Packs that have not been opened by the player
      */
-    getUnopenedPacks: function () {
+    listUnopenedPacks: function () {
         'use strict';
         return new App.Packs(this.get('packs').rest());
     },
@@ -146,12 +146,12 @@ App.Player = Backbone.Model.extend({
         return packToReturn;
     },
     /**
-     * Get the players picks
+     * List the players picks
      *
      * @memberOf App.Player
      * @returns {array} Cards player has picked
      */
-    getPicks: function () {
+    listPicks: function () {
         'use strict';
         return this.get('cards');
     }
@@ -201,22 +201,22 @@ App.Draft = Backbone.Model.extend({
         return this.get("players").at(position);
     },
     /**
-     * Get all the human players in the draft
+     * List all the human players in the draft
      *
      * @memberOf App.Draft
      * @returns {array} of human players
      */
-    getHumanPlayers: function () {
+    listHumanPlayers: function () {
         'use strict';
         return this.get("players").where({human: true});
     },
     /**
-     * Get all the bot players in the draft
+     * List all the bot players in the draft
      *
      * @memberOf App.Draft
      * @returns {array} of bot players
      */
-    getBotPlayers: function () {
+    listBotPlayers: function () {
         'use strict';
         return this.get("players").where({human: false});
     }
