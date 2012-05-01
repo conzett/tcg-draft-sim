@@ -124,6 +124,16 @@ App.Player = Backbone.Model.extend({
         var packToReturn = this.get('packs').shift();
         this.get('packs').unshift(pack);
         return packToReturn;
+    },
+    /**
+     * Get the players picks
+     *
+     * @memberOf App.Player
+     * @returns {array} Cards player has picked
+     */
+    getPicks: function () {
+        'use strict';
+        return this.get('cards');
     }
 });
 

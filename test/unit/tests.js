@@ -51,7 +51,6 @@ test("Removing a card", function () {
   var pack = new Test.TestPack(), cid, card;
   cid = pack.get("cards").at(0).cid;
   card = pack.removeCard(cid);
-  ok(card instanceof App.Card, "removeCard returns a card object");
   equal(pack.get("cards").length, 14, "Expect 14 cards in the test card pack after one removal");
   equal(card.cid, cid, "Expect the ID of the returned card to match the card is removed");
 });
@@ -85,7 +84,7 @@ test("Picking a card", function () {
   });
   var cid = player.getCurrentPack().get('cards').at(0).cid;
   var card = player.pickCard(cid);
-  equal(player.get('cards').length, 1, "Expect players number of cards to be 1 after initial pick");
+  equal(player.getPicks().length, 1, "Expect players number of cards to be 1 after initial pick");
   equal(player.getCurrentPack().get('cards').getByCid(cid), null, "Expect no card with the picked ID to be left in the pack");
 });
 
