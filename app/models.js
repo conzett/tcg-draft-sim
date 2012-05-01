@@ -158,6 +158,17 @@ App.Draft = Backbone.Model.extend({
             tempPack = player.swapCurrentPack(tempPack);
         });
         this.get('players').at(0).get('packs').unshift(tempPack);
+    },
+    /**
+     * Shorcut method to get a player based on their position
+     *
+     * @memberOf App.Draft
+     * @param {int} position 0 index position of a player
+     * @returns {App.Player} The player at that position
+     */
+    getPlayer: function (position) {
+        'use strict';
+        return this.get("players").at(position);
     }
 });
 

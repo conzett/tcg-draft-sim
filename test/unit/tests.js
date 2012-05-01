@@ -28,10 +28,10 @@ test("Passing packs", function () {
   });
 
   draft.passPacks();
-  equal(draft.get("players").at(0).getCurrentPack().cid, cid4, "Expect first player to have player four's pack");
-  equal(draft.get("players").at(1).getCurrentPack().cid, cid1, "Expect second player to have player one's pack");
-  equal(draft.get("players").at(2).getCurrentPack().cid, cid2, "Expect third player to have player twos's pack");
-  equal(draft.get("players").at(3).getCurrentPack().cid, cid3, "Expect fourth player to have player three's pack");
+  equal(draft.getPlayer(0).getCurrentPack().cid, cid4, "Expect first player to have player four's pack");
+  equal(draft.getPlayer(1).getCurrentPack().cid, cid1, "Expect second player to have player one's pack");
+  equal(draft.getPlayer(2).getCurrentPack().cid, cid2, "Expect third player to have player twos's pack");
+  equal(draft.getPlayer(3).getCurrentPack().cid, cid3, "Expect fourth player to have player three's pack");
 });
 
 module("StandardDraft model", {
