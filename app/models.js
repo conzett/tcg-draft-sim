@@ -56,7 +56,7 @@ App.Pack = Backbone.Model.extend({
      * List the remaining cards in a pack
      *
      * @memberOf App.Pack
-     * @returns {array} the cards in the pack
+     * @returns {array} of cards in the pack
      */
     listCards: function () {
         'use strict';
@@ -85,7 +85,7 @@ App.Player = Backbone.Model.extend({
         return {
             human : false,
             packs : new App.Packs(),
-            cards : new App.Cards()
+            picks : new App.Cards()
         };
     },
     /**
@@ -97,7 +97,7 @@ App.Player = Backbone.Model.extend({
      */
     pickCard: function (cid) {
         'use strict';
-        this.get('cards').push(this.get('packs').first().removeCard(cid));
+        this.get('picks').push(this.get('packs').first().removeCard(cid));
     },
     /**
      * Open a new pack
@@ -153,7 +153,7 @@ App.Player = Backbone.Model.extend({
      */
     listPicks: function () {
         'use strict';
-        return this.get('cards');
+        return this.get('picks');
     }
 });
 
