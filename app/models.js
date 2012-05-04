@@ -184,7 +184,7 @@ App.Draft = Backbone.Model.extend({
         'use strict';
         return {
             players : new App.Players(),
-            packNumber : 1
+            round : 1
         };
     },
     /**
@@ -197,7 +197,7 @@ App.Draft = Backbone.Model.extend({
     passPacks: function () {
         'use strict';
         var tempPack, i, length;
-        if (this.get('packNumber') % 2 === 0) {
+        if (this.get('round') % 2 === 0) {
             this.get('players').each(function (player) {
                 tempPack = player.swapCurrentPack(tempPack);
             });
@@ -210,6 +210,9 @@ App.Draft = Backbone.Model.extend({
                 tempPack = this.get('players').at(i).swapCurrentPack(tempPack);
             }
         }
+        if (this.allActivePacksEmpty()) {
+            this.set('round', this.get('round') + 1);
+        }
     },
     /**
      * Shorcut method to get a player based on their position
@@ -221,6 +224,16 @@ App.Draft = Backbone.Model.extend({
     getPlayer: function (position) {
         'use strict';
         return this.get("players").at(position);
+    },
+    /**
+     * Get the round of the current draft
+     *
+     * @memberOf App.Draft
+     * @returns {int} The number of the round based on how many packs have been opened
+     */
+    getRound: function (position) {
+        'use strict';
+        return this.get("round");
     },
     /**
      * List all the human players in the draft

@@ -60,13 +60,28 @@ test("Second pack: packs should be passed right", function () {
         players : new App.Players([player1, player2, player3, player4])
     });
 
-    draft.set('packNumber', 2);
+    draft.set('round', 2);
 
     draft.passPacks();
     equal(draft.getPlayer(0).getCurrentPack().cid, cid4, "Expect first player to have player four's pack after passing right");
     equal(draft.getPlayer(1).getCurrentPack().cid, cid1, "Expect second player to have player ones's pack after passing right");
     equal(draft.getPlayer(2).getCurrentPack().cid, cid2, "Expect third player to have player two's pack after passing right");
     equal(draft.getPlayer(3).getCurrentPack().cid, cid3, "Expect fourth player to have player three's pack after passing right");
+});
+
+test("The correct round number being set", function () {
+    'use strict';
+    var player1 = new App.Player({ packs : new App.Packs([new App.Pack(), new Test.TestPack()])}),
+        player2 = new App.Player({ packs : new App.Packs([new App.Pack(), new Test.TestPack()])}),
+        draft
+
+    draft = new App.Draft({
+        players : new App.Players([player1, player2])
+    });
+
+    equal(draft.getRound(), 1, "Expect the initial round to be 1");
+    draft.passPacks();
+    equal(draft.getRound(), 2, "After passing packs once, the round should be 2");
 });
 
 test("Check to see if all active packs are empty", function () {
