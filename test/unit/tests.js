@@ -11,7 +11,7 @@ Test.TestPack = App.Pack.extend({
 
 module("Draft model");
 
-test("Passing packs left", function () {
+test("First pack: packs should be passed left", function () {
     'use strict';
     var player1 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
         player2 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
@@ -33,10 +33,38 @@ test("Passing packs left", function () {
     });
 
     draft.passPacks();
-    equal(draft.getPlayer(0).getCurrentPack().cid, cid2, "Expect first player to have player two's pack");
-    equal(draft.getPlayer(1).getCurrentPack().cid, cid3, "Expect second player to have player three's pack");
-    equal(draft.getPlayer(2).getCurrentPack().cid, cid4, "Expect third player to have player fours's pack");
-    equal(draft.getPlayer(3).getCurrentPack().cid, cid1, "Expect fourth player to have player one's pack");
+    equal(draft.getPlayer(0).getCurrentPack().cid, cid2, "Expect first player to have player two's pack after passing left");
+    equal(draft.getPlayer(1).getCurrentPack().cid, cid3, "Expect second player to have player three's pack after passing left");
+    equal(draft.getPlayer(2).getCurrentPack().cid, cid4, "Expect third player to have player fours's pack after passing left");
+    equal(draft.getPlayer(3).getCurrentPack().cid, cid1, "Expect fourth player to have player one's pack after passing left");
+});
+
+test("Second pack: packs should be passed right", function () {
+    'use strict';
+    var player1 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+        player2 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+        player3 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+        player4 = new App.Player({ packs : new App.Packs([new Test.TestPack()])}),
+        draft,
+        cid1,
+        cid2,
+        cid3,
+        cid4;
+
+    cid1 = player1.getCurrentPack().cid;
+    cid2 = player2.getCurrentPack().cid;
+    cid3 = player3.getCurrentPack().cid;
+    cid4 = player4.getCurrentPack().cid;
+
+    draft = new App.Draft({
+        players : new App.Players([player1, player2, player3, player4])
+    });
+
+    draft.passPacks();
+    equal(draft.getPlayer(0).getCurrentPack().cid, cid4, "Expect first player to have player four's pack after passing right");
+    equal(draft.getPlayer(1).getCurrentPack().cid, cid1, "Expect second player to have player ones's pack after passing right");
+    equal(draft.getPlayer(2).getCurrentPack().cid, cid2, "Expect third player to have player two's pack after passing right");
+    equal(draft.getPlayer(3).getCurrentPack().cid, cid3, "Expect fourth player to have player three's pack after passing right");
 });
 
 module("StandardDraft model", {
