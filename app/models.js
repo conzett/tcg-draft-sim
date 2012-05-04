@@ -211,6 +211,9 @@ App.Draft = Backbone.Model.extend({
             }
         }
         if (this.allActivePacksEmpty()) {
+            this.get('players').each(function (player) {
+                player.openPack();
+            });
             this.set('round', this.get('round') + 1);
         }
     },

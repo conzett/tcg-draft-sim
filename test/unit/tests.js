@@ -106,6 +106,33 @@ test("Check to see if all active packs are empty", function () {
     ok(draft.allActivePacksEmpty(), "Expect all the active packs to be empty");
 });
 
+test("The next pack is opened when an empty one is passed", function () {
+    'use strict';
+    var pack1 = new App.Pack(),
+        pack2 = new Test.TestPack(),
+        pack3 = new App.Pack(),
+        pack4 = new Test.TestPack(),
+        player1,
+        player2,
+        draft,
+        cid1,
+        cid2;
+
+    cid1 = pack2.cid;
+    cid2 = pack4.cid;
+
+    player1 = new App.Player({ packs : new App.Packs([pack1, pack2])});
+    player2 = new App.Player({ packs : new App.Packs([pack3, pack4])});
+
+    draft = new App.Draft({
+        players : new App.Players([player1, player2])
+    });
+
+    draft.passPacks();
+    equal(player1.getCurrentPack().cid, cid1, "Expect player one's new active pack to have the ID of the next pack in the queue after passing an empty pack");
+    equal(player2.getCurrentPack().cid, cid2, "Expect player two's new active pack to have the ID of the next pack in the queue after passing an empty pack");
+});
+
 module("StandardDraft model", {
     setup: function () {
         'use strict';
