@@ -183,11 +183,17 @@ App.Draft = Backbone.Model.extend({
      */
     passPacks: function () {
         'use strict';
-        var tempPack;
+        /* var tempPack;
         this.get('players').each(function (player) {
             tempPack = player.swapCurrentPack(tempPack);
         });
-        this.get('players').at(0).get('packs').unshift(tempPack);
+        this.get('players').at(0).get('packs').unshift(tempPack);*/
+        var tempPack, i, length = this.get('players').length - 1
+            tempPack = this.get('players').first().getCurrentPack();
+
+        for (i = length; i >= 0; i -= 1) {
+            tempPack = this.get('players').at(i).swapCurrentPack(tempPack);
+        }
     },
     /**
      * Shorcut method to get a player based on their position
