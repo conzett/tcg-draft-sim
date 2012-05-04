@@ -190,7 +190,9 @@ App.Draft = Backbone.Model.extend({
     /**
      * Pass all packs between players
      *
-     * If players have opened an odd number of packs they will be passed left, and vice versa
+     * If players have opened an odd number of packs they will be passed left, and vice versa.
+     * If all the current active packs are empty then each player opens their next pack and the
+     * round number is incremented.
      *
      * @memberOf App.Draft
      */
@@ -234,7 +236,7 @@ App.Draft = Backbone.Model.extend({
      * @memberOf App.Draft
      * @returns {int} The number of the round based on how many packs have been opened
      */
-    getRound: function (position) {
+    getRound: function () {
         'use strict';
         return this.get("round");
     },

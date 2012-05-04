@@ -73,7 +73,7 @@ test("The correct round number being set", function () {
     'use strict';
     var player1 = new App.Player({ packs : new App.Packs([new App.Pack(), new Test.TestPack()])}),
         player2 = new App.Player({ packs : new App.Packs([new App.Pack(), new Test.TestPack()])}),
-        draft
+        draft;
 
     draft = new App.Draft({
         players : new App.Players([player1, player2])
@@ -95,7 +95,8 @@ test("Check to see if all active packs are empty", function () {
             packs : new App.Packs([
                 new App.Pack()
             ])
-        }), draft;
+        }),
+        draft;
 
     draft = new App.Draft({
         players : new App.Players([player1, player2])
@@ -185,7 +186,7 @@ test("Checking for active pack being empty", function () {
     'use strict';
     var player = new App.Player({
         packs : new App.Packs([new App.Pack(), new Test.TestPack()])
-    })
+    });
 
     ok(player.activePackEmpty(), "Expect this to be true since the active pack is empty");
     player.openPack();
