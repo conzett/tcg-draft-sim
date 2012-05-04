@@ -113,6 +113,16 @@ App.Player = Backbone.Model.extend({
         }
     },
     /**
+     * Returns the empty status of the active pack
+     *
+     * @memberOf App.Player
+     * @returns {bool} True if the active pack is empty
+     */
+    activePackEmpty: function () {
+        'use strict';
+        return this.get('packs').first().empty();
+    },
+    /**
      * Return the players current pack
      *
      * @memberOf App.Player
@@ -180,6 +190,8 @@ App.Draft = Backbone.Model.extend({
     /**
      * Pass all packs between players
      *
+     * If players have opened an odd number of packs they will be passed left, and vice versa
+     *
      * @memberOf App.Draft
      */
     passPacks: function () {
@@ -191,7 +203,7 @@ App.Draft = Backbone.Model.extend({
             });
             this.get('players').at(0).get('packs').unshift(tempPack);
         } else {
-            length = this.get('players').length - 1
+            length = this.get('players').length - 1;
             tempPack = this.get('players').first().getCurrentPack();
 
             for (i = length; i >= 0; i -= 1) {
@@ -229,6 +241,23 @@ App.Draft = Backbone.Model.extend({
     listBotPlayers: function () {
         'use strict';
         return this.get("players").where({human: false});
+    },
+    /**
+     * Check to see if all the player's active packs are empty
+     *
+     * @memberOf App.Draft
+     * @returns {bool} True if every player's active pack is empty
+     */
+    allActivePacksEmpty: function () {
+        'use strict';
+        var empty = true;
+        this.get('players').each(function (player) {
+            if (!player.activePackEmpty()) {
+                empty = false;
+                //break;
+            }
+        });
+        return empty;
     }
 });
 
