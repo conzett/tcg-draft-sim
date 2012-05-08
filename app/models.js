@@ -3,8 +3,21 @@
     @class Represents a card. 
  */
 App.Card = Backbone.Model.extend({
-    defaults: {
-    }
+    defaults: function () {
+        'use strict';
+        return {
+            pack : null,
+            player : null
+        };
+    },
+    /**
+     * Pick the card from the pack if it exists
+     *
+     * @memberOf App.Card
+     */
+    pick: function () {
+        'use strict';
+    },
 });
 
 /**
@@ -40,7 +53,7 @@ App.Pack = Backbone.Model.extend({
         return card;
     },
     /**
-     * Check if the pak is empty
+     * Check if the pack is empty
      *
      * @memberOf App.Pack
      * @returns {bool} True if the pack is empty
