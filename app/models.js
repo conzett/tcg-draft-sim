@@ -6,8 +6,7 @@ App.Card = Backbone.Model.extend({
     defaults: function () {
         'use strict';
         return {
-            pack : null,
-            player : null
+            pack : new App.Pack()
         };
     },
     /**
@@ -17,6 +16,7 @@ App.Card = Backbone.Model.extend({
      */
     pick: function () {
         'use strict';
+        this.get('pack')._pickCard(this);
     },
 });
 
@@ -25,64 +25,21 @@ App.Card = Backbone.Model.extend({
     @class Represents a collection of Cards. 
  */
 App.Cards = Backbone.Collection.extend({
-    model: App.Card
-});
-
-/**
-    Creates a new Pack.
-    @class Represents a pack. 
- */
-App.Pack = Backbone.Model.extend({
+    model: App.Card,
     defaults: function () {
         'use strict';
         return {
-            cards : new App.Cards()
+            player : new App.Player()
         };
-    },
-    /**
-     * Remove a card from the pack
-     *
-     * @memberOf App.Pack
-     * @param {String} cid CID of the card you want to remove
-     * @returns {Card} The card specified
-     */
-    removeCard: function (cid) {
-        'use strict';
-        var card = this.get('cards').getByCid(cid);
-        this.get('cards').remove(card);
-        return card;
-    },
-    /**
-     * Check if the pack is empty
-     *
-     * @memberOf App.Pack
-     * @returns {bool} True if the pack is empty
-     */
-    empty: function () {
-        'use strict';
-        if (this.get('cards').length > 0) {
-            return false;
-        }
-        return true;
-    },
-    /**
-     * List the remaining cards in a pack
-     *
-     * @memberOf App.Pack
-     * @returns {array} of cards in the pack
-     */
-    listCards: function () {
-        'use strict';
-        return this.get('cards');
     }
 });
 
-/**
-    Creates a new collection of Packs.
-    @class Represents a collection of Packs. 
- */
-App.Packs = Backbone.Collection.extend({
-    model: App.Pack
+App.Pack = App.Cards.extend({
+    _pickCard: function (card) {
+        'use strict';
+        this.get('player')._addCardToPicks(card);
+        this.remove(card);
+    }
 });
 
 /**
@@ -97,86 +54,19 @@ App.Player = Backbone.Model.extend({
         'use strict';
         return {
             human : false,
-            packs : new App.Packs(),
-            picks : new App.Cards()
+            picks : new App.Cards(),
+            pack : new App.Pack(),
+            draft : new App.Draft(),
+            ready : false
         };
     },
-    /**
-     * Pick a card from the current pack
-     *
-     * @memberOf App.Player
-     * @param {String} cid CID of the card you want to pick
-     * @returns {App.Card} The card specified
-     */
-    pickCard: function (cid) {
+    _addCardToPicks: function (card) {
         'use strict';
-        this.get('picks').push(this.get('packs').first().removeCard(cid));
-    },
-    /**
-     * Open a new pack
-     *
-     * Shifts a pack from the player's packs to the currentPack property
-     *
-     * @memberOf App.Player
-     */
-    openPack: function () {
-        'use strict';
-        if (this.get('packs').first().get('cards').length === 0) {
-            this.get('packs').shift();
+        this.get('picks').push(card);
+        if (this.get('pack').isEmpty()) {
+            // add new pack
         }
-    },
-    /**
-     * Returns the empty status of the active pack
-     *
-     * @memberOf App.Player
-     * @returns {bool} True if the active pack is empty
-     */
-    activePackEmpty: function () {
-        'use strict';
-        return this.get('packs').first().empty();
-    },
-    /**
-     * Return the players current pack
-     *
-     * @memberOf App.Player
-     * @returns {App.Pack} The current open pack
-     */
-    getCurrentPack: function () {
-        'use strict';
-        return this.get('packs').first();
-    },
-    /**
-     * List the unopened packs
-     *
-     * @memberOf App.Player
-     * @returns {array} Packs that have not been opened by the player
-     */
-    listUnopenedPacks: function () {
-        'use strict';
-        return new App.Packs(this.get('packs').rest());
-    },
-    /**
-     * Swap the players current pack
-     *
-     * @memberOf App.Player
-     * @param {App.Pack} newPack Pack to be swapped with the player
-     * @returns {App.Pack} The pack being swapped for
-     */
-    swapCurrentPack: function (pack) {
-        'use strict';
-        var packToReturn = this.get('packs').shift();
-        this.get('packs').unshift(pack);
-        return packToReturn;
-    },
-    /**
-     * List the players picks
-     *
-     * @memberOf App.Player
-     * @returns {array} Cards player has picked
-     */
-    listPicks: function () {
-        'use strict';
-        return this.get('picks');
+        this.set('ready', true);
     }
 });
 
