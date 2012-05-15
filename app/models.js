@@ -16,7 +16,7 @@ App.Card = Backbone.Model.extend({
      */
     pick: function () {
         'use strict';
-        this.get('pack')._pickCard(this);
+        this.get('pack').pickCard(this);
     },
 });
 
@@ -25,19 +25,19 @@ App.Card = Backbone.Model.extend({
     @class Represents a collection of Cards. 
  */
 App.Cards = Backbone.Collection.extend({
-    model: App.Card,
-    defaults: function () {
-        'use strict';
-        return {
-            player : new App.Player()
-        };
-    }
+    model: App.Card    
 });
 
 App.Pack = App.Cards.extend({
-    _pickCard: function (card) {
+    defaults: function () {
         'use strict';
-        this.get('player')._addCardToPicks(card);
+        return {
+            draft : new App.Draft()
+        };
+    }
+    pickCard: function (card) {
+        'use strict';
+        this.get('player').addCardToPicks(card);
         this.remove(card);
     }
 });
@@ -55,18 +55,20 @@ App.Player = Backbone.Model.extend({
         return {
             human : false,
             picks : new App.Cards(),
-            pack : new App.Pack(),
             draft : new App.Draft(),
             ready : false
         };
     },
-    _addCardToPicks: function (card) {
+    addCardToPicks: function (card) {
         'use strict';
         this.get('picks').push(card);
         if (this.get('pack').isEmpty()) {
             // add new pack
         }
         this.set('ready', true);
+    },
+    GetPicks : function () {
+        return this.get('picks');
     }
 });
 
@@ -87,6 +89,7 @@ App.Draft = Backbone.Model.extend({
         'use strict';
         return {
             players : new App.Players(),
+            packs : new App.Packs(),
             round : 1
         };
     },
