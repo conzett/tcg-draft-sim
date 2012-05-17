@@ -14,61 +14,81 @@ App.Card = Backbone.Model.extend({
      *
      * @memberOf App.Card
      */
-    pick: function () {
+    Pick: function () {
         'use strict';
         this.get('pack').pickCard(this);
     },
 });
 
-/**
-    Creates a new collection of Cards.
-    @class Represents a collection of Cards. 
- */
 App.Cards = Backbone.Collection.extend({
-    model: App.Card    
+    model: App.Card
 });
 
-App.Pack = App.Cards.extend({
+App.Pack = Backbone.Model.extend({
     defaults: function () {
         'use strict';
         return {
-            draft : new App.Draft()
+            player : new App.Player(),
+            cards : new App.Cards()
         };
-    }
+    },
+    initialize : function() {
+        'use strict';
+        var that = this;
+        this.get('cards').map(function(card) {
+            return card.set("pack", that);
+        });
+    },
     pickCard: function (card) {
         'use strict';
         this.get('player').addCardToPicks(card);
-        this.remove(card);
+        this.get('cards').remove(card);
+    },
+    GetCards: function () {
+        'use strict';
+        return this.get('cards');
     }
 });
 
 /**
  * Creates a new Player.
  * @class Represents a player.
- * @property {App.Pack} currentPack The player's open pack.
- * @property {App.Packs} packs The player's un-open packs.
- * @property {App.Cards} cards The player's picks.
+ * @property {bool} human If the player is human or not.
+ * @property {App.Pack} pack The player's open pack.
+ * @property {App.Cards} picks The player's picked cards.
+ * @property {App.Draft} draft The draft this player is a part of.
+ * @property {bool} ready If the player is ready or not.
  */
 App.Player = Backbone.Model.extend({
     defaults: function () {
         'use strict';
         return {
             human : false,
+            pack : null,
             picks : new App.Cards(),
-            draft : new App.Draft(),
+            draft : null,
             ready : false
         };
+    },
+    initialize : function() {
+        'use strict';
+        if (this.get('pack')) {
+            this.get('pack').set('player', this);
+        }
     },
     addCardToPicks: function (card) {
         'use strict';
         this.get('picks').push(card);
-        if (this.get('pack').isEmpty()) {
-            // add new pack
-        }
         this.set('ready', true);
     },
-    GetPicks : function () {
+    ListPicks : function () {
+        'use strict';
         return this.get('picks');
+    }
+    ,
+    GetPack : function () {
+        'use strict';
+        return this.get('pack');
     }
 });
 
@@ -89,7 +109,6 @@ App.Draft = Backbone.Model.extend({
         'use strict';
         return {
             players : new App.Players(),
-            packs : new App.Packs(),
             round : 1
         };
     },
@@ -182,22 +201,5 @@ App.Draft = Backbone.Model.extend({
             }
         });
         return empty;
-    }
-});
-
-/**
-    Creates a new StadardDraft.
-    @class Represents a standard draft. 
- */
-App.StandardDraft = App.Draft.extend({
-    initialize: function () {
-        'use strict';
-        this.get('players').push(
-            new App.Player({ human : true})
-        );
-
-        while (this.get('players').length < 8) {
-            this.get('players').push(new App.Player());
-        }
     }
 });
