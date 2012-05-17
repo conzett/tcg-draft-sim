@@ -112,6 +112,13 @@ App.Draft = Backbone.Model.extend({
             round : 1
         };
     },
+    initialize : function() {
+        'use strict';
+        var that = this;
+        this.get('players').map(function(player) {
+            return player.set("draft", that);
+        });
+    },
     /**
      * Pass all packs between players
      *
@@ -143,63 +150,5 @@ App.Draft = Backbone.Model.extend({
             });
             this.set('round', this.get('round') + 1);
         }
-    },
-    /**
-     * Shorcut method to get a player based on their position
-     *
-     * @memberOf App.Draft
-     * @param {int} position 0 index position of a player
-     * @returns {App.Player} The player at that position
-     */
-    getPlayer: function (position) {
-        'use strict';
-        return this.get("players").at(position);
-    },
-    /**
-     * Get the round of the current draft
-     *
-     * @memberOf App.Draft
-     * @returns {int} The number of the round based on how many packs have been opened
-     */
-    getRound: function () {
-        'use strict';
-        return this.get("round");
-    },
-    /**
-     * List all the human players in the draft
-     *
-     * @memberOf App.Draft
-     * @returns {array} of human players
-     */
-    listHumanPlayers: function () {
-        'use strict';
-        return this.get("players").where({human: true});
-    },
-    /**
-     * List all the bot players in the draft
-     *
-     * @memberOf App.Draft
-     * @returns {array} of bot players
-     */
-    listBotPlayers: function () {
-        'use strict';
-        return this.get("players").where({human: false});
-    },
-    /**
-     * Check to see if all the player's active packs are empty
-     *
-     * @memberOf App.Draft
-     * @returns {bool} True if every player's active pack is empty
-     */
-    allActivePacksEmpty: function () {
-        'use strict';
-        var empty = true;
-        this.get('players').each(function (player) {
-            if (!player.activePackEmpty()) {
-                empty = false;
-                //break;
-            }
-        });
-        return empty;
     }
 });
